@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <h1 style="text-align: center; padding: 50px;">Chatbot Test Page</h1>
+    <p style="text-align: center;">Click the WhatsApp button in bottom right corner</p>
+
+    <!-- WhatsApp Chatbot -->
+    <div class="whatsapp-chatbot">
+        <button class="whatsapp-btn" onclick="toggleChat()">
+            <i class="fab fa-whatsapp"></i>
+        </button>
+        <div class="chat-popup" id="chatPopup">
+            <div class="chat-header">
+                <div class="chat-avatar">
+                    <i class="fas fa-om"></i>
+                </div>
+                <div class="chat-info">
+                    <h4>पंडित श्री राम शर्मा</h4>
+                    <p>ऑनलाइन</p>
+                </div>
+                <button class="close-chat" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-body">
+                <div class="chat-message bot-message">
+                    <p>🕉️ नमस्ते! मैं आपकी कैसे मदद कर सकता हूं?</p>
+                </div>
+                <div class="chat-options">
+                    <button class="chat-option" onclick="sendMessage('सेवाएं')">
+                        <i class="fas fa-star"></i> सेवाएं देखें
+                    </button>
+                    <button class="chat-option" onclick="sendMessage('बुकिंग')">
+                        <i class="fas fa-calendar"></i> बुकिंग करें
+                    </button>
+                    <button class="chat-option" onclick="sendMessage('संपर्क')">
+                        <i class="fas fa-phone"></i> संपर्क करें
+                    </button>
+                    <button class="chat-option" onclick="sendMessage('शुल्क')">
+                        <i class="fas fa-rupee-sign"></i> शुल्क जानें
+                    </button>
+                </div>
+                <div id="chatMessages"></div>
+            </div>
+            <div class="chat-footer">
+                <a href="https://wa.link/5xkhyk" target="_blank" class="whatsapp-link">
+                    <i class="fab fa-whatsapp"></i> WhatsApp पर चैट करें
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // WhatsApp Chatbot Functions
+        function toggleChat() {
+            const chatPopup = document.getElementById('chatPopup');
+            if (chatPopup) {
+                chatPopup.classList.toggle('show');
+                console.log('Chat toggled:', chatPopup.classList.contains('show'));
+            } else {
+                console.error('chatPopup element not found');
+            }
+        }
+
+        function sendMessage(option) {
+            const chatMessages = document.getElementById('chatMessages');
+            
+            if (!chatMessages) {
+                console.error('chatMessages element not found');
+                return;
+            }
+            
+            console.log('Sending message:', option);
+            
+            // User message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message';
+            userMsg.innerHTML = `<p><strong>आप:</strong> ${option}</p>`;
+            chatMessages.appendChild(userMsg);
+            
+            // Bot response
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chat-message bot-message';
+                
+                let response = '';
+                switch(option) {
+                    case 'सेवाएं':
+                        response = `<p><strong>हमारी सेवाएं:</strong><br>
+                        • कुंडली विश्लेषण - ₹500<br>
+                        • विवाह परामर्श - ₹1000<br>
+                        • पूजा सेवाएं - ₹2100<br>
+                        • करियर परामर्श - ₹500<br>
+                        • रत्न परामर्श - ₹300<br>
+                        • वास्तु परामर्श - ₹1500</p>`;
+                        break;
+                    case 'बुकिंग':
+                        response = `<p>बुकिंग के लिए:<br>
+                        1. ऊपर "बुकिंग" section में जाएं<br>
+                        2. Form भरें<br>
+                        3. या WhatsApp पर direct संपर्क करें<br>
+                        📱 <a href="https://wa.link/5xkhyk" target="_blank">WhatsApp पर बुक करें</a></p>`;
+                        break;
+                    case 'संपर्क':
+                        response = `<p><strong>संपर्क करें:</strong><br>
+                        📞 Phone: +91 70702 79513<br>
+                        📧 Email: m4740600@gmail.com<br>
+                        💬 WhatsApp: <a href="https://wa.link/5xkhyk" target="_blank">Chat करें</a></p>`;
+                        break;
+                    case 'शुल्क':
+                        response = `<p><strong>सेवा शुल्क:</strong><br>
+                        • कुंडली - ₹500<br>
+                        • विवाह - ₹1000<br>
+                        • पूजा - ₹2100<br>
+                        • करियर - ₹500<br>
+                        • रत्न - ₹300<br>
+                        • वास्तु - ₹1500<br><br>
+                        भुगतान: UPI/QR Code से करें</p>`;
+                        break;
+                    default:
+                        response = '<p>कृपया कोई option चुनें या WhatsApp पर संपर्क करें।</p>';
+                }
+                
+                botMsg.innerHTML = response;
+                chatMessages.appendChild(botMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                console.log('Bot response added');
+            }, 500);
+        }
+
+        console.log('Chatbot script loaded successfully');
+    </script>
+</body>
+</html>

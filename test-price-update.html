@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Update Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        
+        .price-summary {
+            background: linear-gradient(135deg, #FFF8F0 0%, #FFE8D6 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border: 3px solid #FF6B35;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .price-row.total {
+            border-top: 3px dashed #FF6B35;
+            margin-top: 15px;
+            padding-top: 15px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+        
+        .price-amount {
+            color: #FF6B35;
+            font-weight: 800;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .status {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .status h3 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .status p {
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+            }
+            50% {
+                transform: scale(1.02);
+                box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>💰 Price Update Test</h1>
+        
+        <div class="form-group">
+            <label for="testService">सेवा चुनें:</label>
+            <select id="testService">
+                <option value="">सेवा चुनें *</option>
+                <option value="kundali" data-price="500">कुंडली विश्लेषण - ₹500</option>
+                <option value="marriage" data-price="1000">विवाह परामर्श - ₹1000</option>
+                <option value="pooja" data-price="2100">पूजा एवं अनुष्ठान - ₹2100</option>
+                <option value="career" data-price="500">करियर परामर्श - ₹500</option>
+                <option value="gemstone" data-price="300">रत्न परामर्श - ₹300</option>
+                <option value="vastu" data-price="1500">वास्तु परामर्श - ₹1500</option>
+            </select>
+        </div>
+        
+        <div class="price-summary" id="priceSummary">
+            <div class="price-row">
+                <span>सेवा शुल्क:</span>
+                <span class="price-amount" id="priceAmount">₹0</span>
+            </div>
+            <div class="price-row total">
+                <span>कुल राशि:</span>
+                <span class="price-amount" id="totalAmount">₹0</span>
+            </div>
+        </div>
+        
+        <div class="status">
+            <h3>📊 Status:</h3>
+            <p id="statusText">कोई सेवा चुनें...</p>
+            <p id="priceText">Price: ₹0</p>
+            <p id="eventText">Events: 0</p>
+        </div>
+    </div>
+    
+    <script>
+        console.log('🚀 Test page loaded!');
+        
+        const testService = document.getElementById('testService');
+        const priceAmount = document.getElementById('priceAmount');
+        const totalAmount = document.getElementById('totalAmount');
+        const priceSummary = document.getElementById('priceSummary');
+        const statusText = document.getElementById('statusText');
+        const priceText = document.getElementById('priceText');
+        const eventText = document.getElementById('eventText');
+        
+        let eventCount = 0;
+        
+        console.log('Elements found:', {
+            testService: !!testService,
+            priceAmount: !!priceAmount,
+            totalAmount: !!totalAmount
+        });
+        
+        function updatePrice() {
+            eventCount++;
+            console.log(`🔄 Event #${eventCount}: Service changed`);
+            
+            const selectedOption = testService.options[testService.selectedIndex];
+            const price = selectedOption.getAttribute('data-price') || 0;
+            const serviceName = selectedOption.text;
+            
+            console.log('Selected:', serviceName);
+            console.log('Price:', price);
+            
+            if (price === 0 || price === '0') {
+                priceAmount.textContent = '₹0';
+                totalAmount.textContent = '₹0';
+                statusText.textContent = 'कोई सेवा चुनें...';
+                priceText.textContent = 'Price: ₹0';
+                return;
+            }
+            
+            // Pulse animation
+            priceSummary.style.animation = 'pulse 0.5s ease';
+            setTimeout(() => {
+                priceSummary.style.animation = '';
+            }, 500);
+            
+            // Scale animation
+            priceAmount.style.transform = 'scale(1.3)';
+            priceAmount.style.color = '#28a745';
+            totalAmount.style.transform = 'scale(1.3)';
+            totalAmount.style.color = '#28a745';
+            
+            // Update text
+            priceAmount.textContent = `₹${price}`;
+            totalAmount.textContent = `₹${price}`;
+            
+            // Update status
+            statusText.textContent = `✅ ${serviceName}`;
+            priceText.textContent = `Price: ₹${price}`;
+            eventText.textContent = `Events: ${eventCount}`;
+            
+            // Add checkmark
+            const checkIcon = document.createElement('i');
+            checkIcon.className = 'fas fa-check-circle';
+            checkIcon.style.cssText = 'color: #28a745; margin-left: 8px;';
+            priceAmount.appendChild(checkIcon);
+            
+            // Reset after 400ms
+            setTimeout(() => {
+                priceAmount.style.transform = 'scale(1)';
+                priceAmount.style.color = '';
+                totalAmount.style.transform = 'scale(1)';
+                totalAmount.style.color = '';
+                if (checkIcon.parentNode) {
+                    checkIcon.remove();
+                }
+            }, 400);
+            
+            console.log('✅ Price updated successfully!');
+        }
+        
+        // Add event listener
+        testService.addEventListener('change', updatePrice);
+        console.log('✅ Event listener attached!');
+        
+        // Test on load
+        window.addEventListener('load', () => {
+            console.log('✅ Page fully loaded!');
+        });
+    </script>
+</body>
+</html>
